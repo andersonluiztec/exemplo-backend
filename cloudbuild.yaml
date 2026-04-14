@@ -10,7 +10,7 @@ steps:
       - |
         echo "🔌 Conectando na VM e atualizando backend..."
 
-        gcloud compute ssh vm-exemplo-backend --zone=us-west1-b --command="
+        gcloud compute ssh vm-exemplo-backend --zone=us-west1-b --tunnel-through-iap --command="
           echo '📥 Atualizando código...'
           cd /home/anderson/backend &&
 
