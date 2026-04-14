@@ -8,25 +8,31 @@ steps:
     args:
       - -c
       - |
-        echo "🔌 Conectando na VM e atualizando backend..."
+        echo "Conectando"
 
-        gcloud compute ssh vm-exemplo-backend --zone=us-west1-b --tunnel-through-iap --command="
-          echo '📥 Atualizando código...'
-          cd /home/anderson/backend &&
-
-          git pull &&
-
-          echo '🐍 Ativando venv...'
-          source venv/bin/activate &&
-
-          echo '📦 Instalando dependências...'
-          pip install -r requirements.txt &&
-
-          echo '🔄 Reiniciando aplicação...'
-          pkill gunicorn;
-
-          nohup gunicorn -b 0.0.0.0:8080 app:app > app.log 2>&1 &
-        "
+        gcloud compute ssh --zone "us-central1-f" "vm-exemplo-backend" --project "project-2713f58c-e744-43b3-a3d" --quiet"
+    #args:
+    #  - -c
+    #  - |
+    #    echo "🔌 Conectando na VM e atualizando backend..."
+#
+    #    gcloud compute ssh vm-exemplo-backend --zone=us-west1-b --tunnel-through-iap --command="
+    #      echo '📥 Atualizando código...'
+    #      cd /home/anderson/backend &&
+#
+    #      git pull &&
+#
+    #      echo '🐍 Ativando venv...'
+    #      source venv/bin/activate &&
+#
+    #      echo '📦 Instalando dependências...'
+    #      pip install -r requirements.txt &&
+#
+    #      echo '🔄 Reiniciando aplicação...'
+    #      pkill gunicorn;
+#
+    #      nohup gunicorn -b 0.0.0.0:8080 app:app > app.log 2>&1 &
+    #    "
 
 options:
   logging: CLOUD_LOGGING_ONLY
