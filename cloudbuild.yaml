@@ -39,7 +39,7 @@ steps:
             -o StrictHostKeyChecking=no \
             andersonluiztec_arqt03_gmail_com@$$IP "
               
-              mb /home/backend &&
+              mkdir /home/backend &&
 
               cd /home/backend &&
 
