@@ -1,38 +1,33 @@
 steps:
-
-  # =========================
-  # 🔌 DEPLOY BACKEND NA VM
-  # =========================
+  # 🔐 pegar chave
   - name: 'gcr.io/cloud-builders/gcloud'
+    id: 'get-ssh-key'
     entrypoint: bash
     args:
       - -c
       - |
-        echo "Conectando..."
+        gcloud secrets versions access latest --secret=gcp-deploy-key > /workspace/id_rsa
+        chmod 600 /workspace/id_rsa
 
-        gcloud compute ssh --zone us-central1-f vm-exemplo-backend --project project-2713f58c-e744-43b3-a3d --quiet
-#    args:
-#      - -c
-#      - |
-#        echo "🔌 Conectando na VM e atualizando backend..."
-#
-#        gcloud compute ssh vm-exemplo-backend --zone=us-west1-b --tunnel-through-iap --command="
-#          echo '📥 Atualizando código...'
-#          cd /home/anderson/backend &&
-#
-#          git pull &&
-#
-#          echo '🐍 Ativando venv...'
-#          source venv/bin/activate &&
-#
-#          echo '📦 Instalando dependências...'
-#          pip install -r requirements.txt &&
-#
-#          echo '🔄 Reiniciando aplicação...'
-#          pkill gunicorn;
-#
-#          nohup gunicorn -b 0.0.0.0:8080 app:app > app.log 2>&1 &
-#        "
+  # 🚀 deploy
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: 'deploy'
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        ssh -i /workspace/id_rsa \
+            -o StrictHostKeyChecking=no \
+            anderson@IP_DA_VM "
+              cd /home/anderson/backend &&
 
-options:
-  logging: CLOUD_LOGGING_ONLY
+              git pull &&
+
+              source venv/bin/activate &&
+
+              pip install -r requirements.txt &&
+
+              pkill gunicorn;
+
+              nohup gunicorn -b 0.0.0.0:8080 app:app > app.log 2>&1 &
+            "
