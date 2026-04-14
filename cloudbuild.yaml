@@ -31,13 +31,13 @@ steps:
     args:
       - -c
       - |
-        IP=$(cat /workspace/ip.txt)
+        IP=$$(cat /workspace/ip.txt)
 
-        echo "🚀 Conectando na VM: $IP"
+        echo "🚀 Conectando na VM: $$IP"
 
         ssh -i /workspace/id_rsa \
             -o StrictHostKeyChecking=no \
-            anderson@$IP "
+            andersonluiztec_arqt03_gmail_com@$$IP "
               cd /home/anderson/backend &&
 
               git pull &&
