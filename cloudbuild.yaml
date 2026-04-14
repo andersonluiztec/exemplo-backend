@@ -39,11 +39,14 @@ steps:
             -o StrictHostKeyChecking=no \
             andersonluiztec_arqt03_gmail_com@$$IP "
               
-              mkdir backend &&
+              echo "📂 Onde estou:"
+              pwd
 
-              cd backend &&
+              echo "📂 Listando tudo na raiz do workspace:"
+              ls -la /workspace
 
-              git pull &&
+              echo "📂 Conteúdo workspace:"
+              ls -R /workspace
 
               source venv/bin/activate &&
 
