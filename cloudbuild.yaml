@@ -1,24 +1,43 @@
 steps:
-  # 🔐 pegar chave
+
+  # 🔐 1. Recuperar chave SSH
   - name: 'gcr.io/cloud-builders/gcloud'
     id: 'get-ssh-key'
     entrypoint: bash
     args:
       - -c
       - |
+        echo "🔐 Pegando chave SSH..."
         gcloud secrets versions access latest --secret=gcp-deploy-key > /workspace/id_rsa
         chmod 600 /workspace/id_rsa
 
-  # 🚀 deploy
+  # 🌐 2. Descobrir IP da VM
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: 'get-ip'
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        echo "🌐 Obtendo IP da VM..."
+        gcloud compute instances describe vm-exemplo-backend \
+          --zone=us-west1-b \
+          --format='get(networkInterfaces[0].accessConfigs[0].natIP)' \
+          > /workspace/ip.txt
+
+  # 🚀 3. Deploy via SSH
   - name: 'gcr.io/cloud-builders/gcloud'
     id: 'deploy'
     entrypoint: bash
     args:
       - -c
       - |
+        IP=$(cat /workspace/ip.txt)
+
+        echo "🚀 Conectando na VM: $IP"
+
         ssh -i /workspace/id_rsa \
             -o StrictHostKeyChecking=no \
-            anderson@IP_DA_VM "
+            anderson@$IP "
               cd /home/anderson/backend &&
 
               git pull &&
@@ -27,7 +46,7 @@ steps:
 
               pip install -r requirements.txt &&
 
-              pkill gunicorn;
+              pkill gunicorn || true;
 
               nohup gunicorn -b 0.0.0.0:8080 app:app > app.log 2>&1 &
             "
