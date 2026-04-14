@@ -38,7 +38,10 @@ steps:
         ssh -i /workspace/id_rsa \
             -o StrictHostKeyChecking=no \
             andersonluiztec_arqt03_gmail_com@$$IP "
-              cd /home/anderson/backend &&
+              
+              mb /home/backend &&
+
+              cd /home/backend &&
 
               git pull &&
 
