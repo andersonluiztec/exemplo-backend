@@ -39,9 +39,9 @@ steps:
             -o StrictHostKeyChecking=no \
             andersonluiztec_arqt03_gmail_com@$$IP "
               
-              mkdir /home/backend &&
+              mkdir /home/andersonluiztec_arqt03_gmail_com/backend &&
 
-              cd /home/backend &&
+              cd /home/andersonluiztec_arqt03_gmail_com/backend &&
 
               git pull &&
 
