@@ -31,3 +31,6 @@ steps:
 
               nohup gunicorn -b 0.0.0.0:8080 app:app > app.log 2>&1 &
             "
+
+options:
+  logging: CLOUD_LOGGING_ONLY
