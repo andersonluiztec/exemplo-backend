@@ -10,7 +10,7 @@ steps:
       - |
         echo "Conectando"
 
-        gcloud compute ssh --zone "us-central1-f" "vm-exemplo-backend" --project "project-2713f58c-e744-43b3-a3d" --quiet
+        gcloud compute ssh --zone us-central1-f vm-exemplo-backend --project project-2713f58c-e744-43b3-a3d --quiet
 #    args:
 #      - -c
 #      - |
