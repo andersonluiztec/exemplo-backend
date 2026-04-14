@@ -20,7 +20,7 @@ steps:
       - |
         echo "🌐 Obtendo IP da VM..."
         gcloud compute instances describe vm-exemplo-backend \
-          --zone=us-west1-b \
+          --zone=us-central1-f \
           --format='get(networkInterfaces[0].accessConfigs[0].natIP)' \
           > /workspace/ip.txt
 
