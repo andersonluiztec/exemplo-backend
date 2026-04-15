@@ -1,0 +1,42 @@
+#!/bin/bash
+
+set -e
+
+echo "🚀 Iniciando setup do backend..."
+
+cd ~
+
+echo "📦 Instalando dependências..."
+sudo apt update
+sudo apt install -y git python3-pip python3-venv
+
+echo "📁 Preparando diretório..."
+mkdir -p backend
+cd backend
+
+echo "📥 Clonando ou atualizando código..."
+if [ ! -d ".git" ]; then
+  git clone https://github.com/andersonluiztec/exemplo-backend.git .
+else
+  git pull
+fi
+
+echo "🐍 Configurando ambiente virtual..."
+if [ ! -d "venv" ]; then
+  python3 -m venv venv
+fi
+
+source venv/bin/activate
+
+echo "📦 Instalando dependências..."
+pip install --upgrade pip
+pip install -r requirements.txt
+pip install gunicorn
+
+echo "🛑 Parando app anterior..."
+pkill gunicorn || true
+
+echo "🚀 Subindo aplicação..."
+nohup gunicorn -b 0.0.0.0:8080 app:app > app.log 2>&1 &
+
+echo "✅ Backend rodando!"

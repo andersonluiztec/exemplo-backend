@@ -1,0 +1,27 @@
+swagger: "2.0"
+info:
+  title: exemplo-backend
+  version: 1.0.0
+
+host: "exemplo-backend"
+
+paths:
+  /clientes:
+    get:
+      operationId: getClientesApi
+      security:
+        - firebase: [] 
+      x-google-backend:
+        address:  https://exemplo-backend-tspkg63t4a-ew.a.run.app/clientes
+      responses:
+        '200':
+          description: OK
+
+securityDefinitions:
+  firebase:
+    type: "oauth2"
+    flow: "implicit"
+    authorizationUrl: ""
+    x-google-issuer: "https://securetoken.google.com/exemplo-backend"
+    x-google-jwks_uri: "https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com"
+    x-google-audiences: "exemplo-backend"

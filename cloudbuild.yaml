@@ -1,72 +1,13 @@
 steps:
-
-  # 🔐 1. Recuperar chave SSH
   - name: 'gcr.io/cloud-builders/gcloud'
-    id: 'get-ssh-key'
-    entrypoint: bash
     args:
-      - -c
-      - |
-        echo "🔐 Pegando chave SSH..."
-        gcloud secrets versions access latest --secret=gcp-deploy-key > /workspace/id_rsa
-        chmod 600 /workspace/id_rsa
-
-  # 🌐 2. Descobrir IP da VM
-  - name: 'gcr.io/cloud-builders/gcloud'
-    id: 'get-ip'
-    entrypoint: bash
-    args:
-      - -c
-      - |
-        echo "🌐 Obtendo IP da VM..."
-        gcloud compute instances describe vm-exemplo-backend \
-          --zone=us-central1-f \
-          --format='get(networkInterfaces[0].accessConfigs[0].natIP)' \
-          > /workspace/ip.txt
-
-  # 🚀 3. Deploy via SSH
-  - name: 'gcr.io/cloud-builders/gcloud'
-    id: 'deploy'
-    entrypoint: bash
-    args:
-      - -c
-      - |
-        IP=$$(cat /workspace/ip.txt)
-
-        echo "🚀 Conectando na VM: $$IP"
-
-        ssh -i /workspace/id_rsa \
-            -o StrictHostKeyChecking=no \
-            andersonluiztec_arqt03_gmail_com@$$IP "
-              
-              cd ~
-
-              # garante git
-              if ! command -v git &> /dev/null
-              then
-                sudo apt update
-                sudo apt install -y git
-              fi
-
-              # garante pasta
-              mkdir -p backend
-              cd backend
-
-              # clona ou atualiza
-              if [ ! -d ".git" ]; then
-                git clone https://github.com/andersonluiztec/exemplo-backend.git .
-              else
-                git pull
-              fi &&
-
-              source venv/bin/activate &&
-
-              pip install -r requirements.txt &&
-
-              pkill gunicorn || true;
-
-              nohup gunicorn -b 0.0.0.0:8080 app:app > app.log 2>&1 &
-            "
+      [
+        'compute',
+        'instances',
+        'reset',
+        'vm-exemplo-backend',
+        '--zone=us-central1-f'
+      ]
 
 options:
   logging: CLOUD_LOGGING_ONLY
