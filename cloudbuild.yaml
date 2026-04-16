@@ -1,13 +1,28 @@
 steps:
-  - name: 'gcr.io/cloud-builders/gcloud'
-    args:
-      [
-        'compute',
-        'instances',
-        'reset',
-        'vm-exemplo-backend',
-        '--zone=us-central1-f'
-      ]
+  # 🔨 Build da imagem Docker
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t', 'us-central1-docker.pkg.dev/project-2713f58c-e744-43b3-a3d/exemplo-backend/backend:latest',
+      '.'
+    ]
 
-options:
-  logging: CLOUD_LOGGING_ONLY
+  # 📦 Push para o Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'push',
+      'us-central1-docker.pkg.dev/project-2713f58c-e744-43b3-a3d/exemplo-backend/backend:latest'
+    ]
+
+  # 🚀 Deploy no Cloud Run
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: [
+      'run', 'deploy', 'backend-service',
+      '--image', 'us-central1-docker.pkg.dev/project-2713f58c-e744-43b3-a3d/exemplo-backend/backend:latest',
+      '--region', 'us-central1',
+      '--platform', 'managed',
+      '--allow-unauthenticated'
+    ]
+
+images:
+  - 'us-central1-docker.pkg.dev/project-2713f58c-e744-43b3-a3d/exemplo-backend/backend:latest'
