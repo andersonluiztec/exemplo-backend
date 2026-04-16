@@ -17,7 +17,7 @@ steps:
   # 🚀 Deploy no Cloud Run
   - name: 'gcr.io/cloud-builders/gcloud'
     args: [
-      'run', 'deploy', 'backend-service',
+      'run', 'deploy', 'exemplo-backend',
       '--image', 'us-central1-docker.pkg.dev/project-2713f58c-e744-43b3-a3d/exemplo-backend/backend:latest',
       '--region', 'us-central1',
       '--platform', 'managed',
