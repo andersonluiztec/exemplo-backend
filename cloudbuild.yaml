@@ -19,7 +19,7 @@ steps:
     args: [
       'run', 'deploy', 'exemplo-backend',
       '--image', 'us-central1-docker.pkg.dev/project-2713f58c-e744-43b3-a3d/exemplo-backend/backend:latest',
-      '--region', 'us-central1',
+      '--region', 'europe-west1',
       '--platform', 'managed',
       '--allow-unauthenticated'
     ]
