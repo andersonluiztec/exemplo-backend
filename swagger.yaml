@@ -31,7 +31,7 @@ paths:
   /clientes/secure:
     options:
       summary: CORS support
-      operationId: corsClientes
+      operationId: corsClientesSeguro
       responses:
         '204':
           description: No Content
@@ -39,7 +39,7 @@ paths:
         address: https://exemplo-backend-tspkg63t4a-ew.a.run.app/clientes
 
     get:
-      operationId: getClientesApi
+      operationId: getClientesSeguroApi
       security:
         - firebase: [] 
       x-google-backend:
